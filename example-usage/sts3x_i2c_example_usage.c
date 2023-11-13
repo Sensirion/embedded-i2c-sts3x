@@ -3,7 +3,7 @@
  *
  * Generator:     sensirion-driver-generator 0.33.0
  * Product:       sts3x
- * Model-Version: 1.0.0
+ * Model-Version: 2.0.0
  */
 /*
  * Copyright (c) 2023, Sensirion AG
@@ -62,21 +62,6 @@ int main(void) {
                                              MPS_ONE_PER_SECOND);
     if (error != NO_ERROR) {
         printf("error executing start_periodic_measurement(): %i\n", error);
-        return error;
-    }
-    float a_temperature = 0.0;
-    uint16_t repetition = 0;
-    for (repetition = 0; repetition < 50; repetition++) {
-        error = sts3x_blocking_read_measurement(&a_temperature);
-        if (error != NO_ERROR) {
-            printf("error executing blocking_read_measurement(): %i\n", error);
-            continue;
-        }
-        printf("a_temperature: %.2f\n", a_temperature);
-    }
-
-    error = sts3x_stop_measurement();
-    if (error != NO_ERROR) {
         return error;
     }
     return NO_ERROR;

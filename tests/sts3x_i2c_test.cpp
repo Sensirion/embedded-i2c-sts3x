@@ -3,7 +3,7 @@
  *
  * Generator:     sensirion-driver-generator 0.33.0
  * Product:       sts3x
- * Model-Version: 1.0.0
+ * Model-Version: 2.0.0
  */
 
 #include "sensirion_common.h"
@@ -21,15 +21,6 @@ TEST_GROUP (STS3X_Tests) {
         sts3x_init(0x4A);
     }
 };
-
-TEST (STS3X_Tests, test_measure_single_shot1) {
-    int16_t local_error = 0;
-    float a_temperature = 0.0;
-    local_error =
-        sts3x_measure_single_shot(REPEATABILITY_MEDIUM, false, &a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "measure_single_shot");
-    printf("a_temperature: %.2f\n", a_temperature);
-}
 
 TEST (STS3X_Tests, test_measure_single_shot_high_repeatability1) {
     int16_t local_error = 0;
@@ -124,16 +115,12 @@ TEST (STS3X_Tests, test_soft_reset1) {
 TEST (STS3X_Tests, test_start_periodic_measurement1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_periodic_measurement(REPEATABILITY_MEDIUM,
                                                    MPS_ONE_PER_SECOND);
     CHECK_EQUAL_ZERO_TEXT(local_error, "start_periodic_measurement");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -141,16 +128,12 @@ TEST (STS3X_Tests, test_start_periodic_measurement1) {
 TEST (STS3X_Tests, test_start_measurement_0_5_mps_high_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_0_5_mps_high_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_0_5_mps_high_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -158,16 +141,12 @@ TEST (STS3X_Tests, test_start_measurement_0_5_mps_high_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_0_5_mps_medium_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_0_5_mps_medium_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_0_5_mps_medium_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -175,16 +154,12 @@ TEST (STS3X_Tests, test_start_measurement_0_5_mps_medium_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_0_5_mps_low_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_0_5_mps_low_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_0_5_mps_low_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -192,16 +167,12 @@ TEST (STS3X_Tests, test_start_measurement_0_5_mps_low_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_1_mps_high_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_1_mps_high_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_1_mps_high_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -209,16 +180,12 @@ TEST (STS3X_Tests, test_start_measurement_1_mps_high_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_1_mps_medium_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_1_mps_medium_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_1_mps_medium_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -226,16 +193,12 @@ TEST (STS3X_Tests, test_start_measurement_1_mps_medium_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_1_mps_low_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_1_mps_low_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_1_mps_low_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -243,16 +206,12 @@ TEST (STS3X_Tests, test_start_measurement_1_mps_low_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_2_mps_high_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_2_mps_high_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_2_mps_high_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -260,16 +219,12 @@ TEST (STS3X_Tests, test_start_measurement_2_mps_high_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_2_mps_medium_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_2_mps_medium_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_2_mps_medium_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -277,16 +232,12 @@ TEST (STS3X_Tests, test_start_measurement_2_mps_medium_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_2_mps_low_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_2_mps_low_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_2_mps_low_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -294,16 +245,12 @@ TEST (STS3X_Tests, test_start_measurement_2_mps_low_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_4_mps_high_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_4_mps_high_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_4_mps_high_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -311,16 +258,12 @@ TEST (STS3X_Tests, test_start_measurement_4_mps_high_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_4_mps_medium_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_4_mps_medium_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_4_mps_medium_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -328,16 +271,12 @@ TEST (STS3X_Tests, test_start_measurement_4_mps_medium_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_4_mps_low_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_4_mps_low_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_4_mps_low_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -345,16 +284,12 @@ TEST (STS3X_Tests, test_start_measurement_4_mps_low_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_10_mps_high_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_10_mps_high_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_10_mps_high_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -362,16 +297,12 @@ TEST (STS3X_Tests, test_start_measurement_10_mps_high_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_10_mps_medium_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_10_mps_medium_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_10_mps_medium_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }
@@ -379,16 +310,12 @@ TEST (STS3X_Tests, test_start_measurement_10_mps_medium_repeatability1) {
 TEST (STS3X_Tests, test_start_measurement_10_mps_low_repeatability1) {
     int16_t local_error = 0;
     uint16_t temperature_ticks = 0;
-    float a_temperature = 0.0;
     local_error = sts3x_start_measurement_10_mps_low_repeatability();
     CHECK_EQUAL_ZERO_TEXT(local_error,
                           "start_measurement_10_mps_low_repeatability");
     local_error = sts3x_read_measurement(&temperature_ticks);
     CHECK_EQUAL_ZERO_TEXT(local_error, "read_measurement");
     printf("temperature_ticks: %u\n", temperature_ticks);
-    local_error = sts3x_blocking_read_measurement(&a_temperature);
-    CHECK_EQUAL_ZERO_TEXT(local_error, "blocking_read_measurement");
-    printf("a_temperature: %.2f\n", a_temperature);
     local_error = sts3x_stop_measurement();
     CHECK_EQUAL_ZERO_TEXT(local_error, "stop_measurement");
 }

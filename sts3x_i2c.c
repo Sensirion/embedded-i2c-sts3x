@@ -3,7 +3,7 @@
  *
  * Generator:     sensirion-driver-generator 0.33.0
  * Product:       sts3x
- * Model-Version: 1.0.0
+ * Model-Version: 2.0.0
  */
 /*
  * Copyright (c) 2023, Sensirion AG
@@ -50,62 +50,6 @@ static mps _internal_mps = MPS_ONE_PER_SECOND;
 
 void sts3x_init(uint8_t i2c_address) {
     _i2c_address = i2c_address;
-}
-
-float signal_temperature(uint16_t temperature_ticks) {
-    float temperature = 0.0;
-    temperature = (float)(temperature_ticks);
-    temperature = -45 + ((temperature * 175.0) / 65535.0);
-    return temperature;
-}
-
-int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
-                                  bool is_clock_stretching,
-                                  float* a_temperature) {
-    uint16_t raw_temp = 0;
-    int16_t local_error = 0;
-    if (is_clock_stretching) {
-        if (measurement_repeatability == REPEATABILITY_HIGH) {
-            local_error =
-                sts3x_measure_single_shot_high_repeatability_clock_stretching(
-                    &raw_temp);
-            if (local_error != NO_ERROR) {
-                return local_error;
-            }
-        } else if (measurement_repeatability == REPEATABILITY_MEDIUM) {
-            local_error =
-                sts3x_measure_single_shot_medium_repeatability_clock_stretching(
-                    &raw_temp);
-            if (local_error != NO_ERROR) {
-                return local_error;
-            }
-        } else if (measurement_repeatability == REPEATABILITY_LOW) {
-            local_error =
-                sts3x_measure_single_shot_low_repeatability_clock_stretching(
-                    &raw_temp);
-            if (local_error != NO_ERROR) {
-                return local_error;
-            }
-        }
-    } else if (measurement_repeatability == REPEATABILITY_HIGH) {
-        local_error = sts3x_measure_single_shot_high_repeatability(&raw_temp);
-        if (local_error != NO_ERROR) {
-            return local_error;
-        }
-    } else if (measurement_repeatability == REPEATABILITY_MEDIUM) {
-        local_error = sts3x_measure_single_shot_medium_repeatability(&raw_temp);
-        if (local_error != NO_ERROR) {
-            return local_error;
-        }
-    } else if (measurement_repeatability == REPEATABILITY_LOW) {
-        local_error = sts3x_measure_single_shot_low_repeatability(&raw_temp);
-        if (local_error != NO_ERROR) {
-            return local_error;
-        }
-    }
-    *a_temperature = signal_temperature(raw_temp);
-
-    return local_error;
 }
 
 int16_t
@@ -200,29 +144,6 @@ sts3x_start_periodic_measurement(repeatability measurement_repeatability,
         }
     }
     _internal_mps = messages_per_second;
-    return local_error;
-}
-
-int16_t sts3x_blocking_read_measurement(float* a_temperature) {
-    uint16_t raw_temp = 0;
-    int16_t local_error = 0;
-    if (_internal_mps == MPS_EVERY_TWO_SECONDS) {
-        sensirion_hal_sleep_us(2000000);
-    } else if (_internal_mps == MPS_ONE_PER_SECOND) {
-        sensirion_hal_sleep_us(1000000);
-    } else if (_internal_mps == MPS_TWO_PER_SECOND) {
-        sensirion_hal_sleep_us(500000);
-    } else if (_internal_mps == MPS_FOUR_PER_SECOND) {
-        sensirion_hal_sleep_us(250000);
-    } else if (_internal_mps == MPS_TEN_PER_SECOND) {
-        sensirion_hal_sleep_us(95000);
-    }
-    local_error = sts3x_read_measurement(&raw_temp);
-    if (local_error != NO_ERROR) {
-        return local_error;
-    }
-    *a_temperature = signal_temperature(raw_temp);
-
     return local_error;
 }
 

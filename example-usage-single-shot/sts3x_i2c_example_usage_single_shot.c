@@ -3,7 +3,7 @@
  *
  * Generator:     sensirion-driver-generator 0.33.0
  * Product:       sts3x
- * Model-Version: 1.0.0
+ * Model-Version: 2.0.0
  */
 /*
  * Copyright (c) 2023, Sensirion AG
@@ -58,16 +58,18 @@ int main(void) {
         return error;
     }
     printf("a_status_register: %02x\n", a_status_register);
-    float a_temperature = 0.0;
+    uint16_t temperature_ticks = 0;
     uint16_t repetition = 0;
     for (repetition = 0; repetition < 50; repetition++) {
-        error = sts3x_measure_single_shot(REPEATABILITY_MEDIUM, false,
-                                          &a_temperature);
+        error =
+            sts3x_measure_single_shot_medium_repeatability(&temperature_ticks);
         if (error != NO_ERROR) {
-            printf("error executing measure_single_shot(): %i\n", error);
+            printf("error executing "
+                   "measure_single_shot_medium_repeatability(): %i\n",
+                   error);
             continue;
         }
-        printf("a_temperature: %.2f\n", a_temperature);
+        printf("temperature_ticks: %u\n", temperature_ticks);
     }
 
     return NO_ERROR;
