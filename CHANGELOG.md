@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2023-11-14
+
 ### CHANGED
 
 - Remove usage of float.
@@ -19,3 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release
 
+[unreleased] https://github.com/Sensirion/embedded-i2c-sts3x/compare/2.0.0...HEAD
+[2.0.0] https://github.com/Sensirion/embedded-i2c-sts3x/compare/1.0.0...2.0.0
+[1.0.0] https://github.com/Sensirion/embedded-i2c-sts3x/releases/tag/1.0.0
