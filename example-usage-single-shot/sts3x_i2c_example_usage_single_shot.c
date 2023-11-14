@@ -58,18 +58,16 @@ int main(void) {
         return error;
     }
     printf("a_status_register: %02x\n", a_status_register);
-    uint16_t temperature_ticks = 0;
+    int32_t temperature = 0;
     uint16_t repetition = 0;
     for (repetition = 0; repetition < 50; repetition++) {
-        error =
-            sts3x_measure_single_shot_medium_repeatability(&temperature_ticks);
+        error = sts3x_measure_single_shot(REPEATABILITY_MEDIUM, false,
+                                          &temperature);
         if (error != NO_ERROR) {
-            printf("error executing "
-                   "measure_single_shot_medium_repeatability(): %i\n",
-                   error);
+            printf("error executing measure_single_shot(): %i\n", error);
             continue;
         }
-        printf("temperature_ticks: %u\n", temperature_ticks);
+        printf("temperature [milli degC]: %i\n", temperature);
     }
 
     return NO_ERROR;

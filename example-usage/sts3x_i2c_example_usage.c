@@ -64,5 +64,22 @@ int main(void) {
         printf("error executing start_periodic_measurement(): %i\n", error);
         return error;
     }
+
+    int32_t a_temperature = 0.0;
+    uint16_t repetition = 0;
+    for (repetition = 0; repetition < 50; repetition++) {
+        error = sts3x_blocking_read_measurement(&a_temperature);
+        if (error != NO_ERROR) {
+            printf("error executing blocking_read_measurement(): %i\n", error);
+            continue;
+        }
+        printf("a_temperature [milli degC]: %i\n", a_temperature);
+    }
+
+    error = sts3x_stop_measurement();
+    if (error != NO_ERROR) {
+        return error;
+    }
+
     return NO_ERROR;
 }

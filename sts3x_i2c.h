@@ -111,6 +111,35 @@ typedef enum {
 void sts3x_init(uint8_t i2c_address);
 
 /**
+ * @brief Convert raw temperature ticks to physical value
+ *
+ * Approximation for conversion from temperature tick to pyhsical value.
+ * Conversion function to float is
+ * temperature = -45 + ((temperature_ticks * 175.0) / 65535.0);
+ *
+ * Result of approximation is in milli degrees celsius.
+ *
+ * @param[in] temperature_ticks
+ *
+ * @return Measured temperature in milli degrees celsius
+ */
+int32_t sts3x_signal_temperature(uint16_t temperature_ticks);
+
+/**
+ * @brief Single shot measurement with the specified properties
+ *
+ * @param[in] measurement_repeatability The repeatability of the periodic
+ * measurement
+ * @param[in] is_clock_stretching Toggle clock stretching
+ * @param[out] a_temperature Measured temperature in milli degrees celsius
+ *
+ * @return error_code 0 on success, an error code otherwise.
+ */
+int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
+                                  bool is_clock_stretching,
+                                  int32_t* a_temperature);
+
+/**
  * @brief sts3x_start_periodic_measurement
  *
  * Start the periodic measurement measurement mode with the specified
@@ -129,6 +158,22 @@ void sts3x_init(uint8_t i2c_address);
 int16_t
 sts3x_start_periodic_measurement(repeatability measurement_repeatability,
                                  mps messages_per_second);
+
+/**
+ * @brief sts3x_blocking_read_measurement
+ *
+ * Reads the measurement initiated with the 'start_periodic_measurement'
+ * command.
+ *
+ * This is a convenience method that takes into consideration the configured
+ * messages per second with which the 'start_periodic_measurement' command was
+ * called and blocks accordingly.
+ *
+ * @param[out] a_temperature Measured temperature in milli degrees celsius.
+ *
+ * @return error_code 0 on success, an error code otherwise.
+ */
+int16_t sts3x_blocking_read_measurement(int32_t* a_temperature);
 
 /**
  * @brief Read the contents of the status register
