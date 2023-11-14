@@ -46,7 +46,7 @@
 static uint8_t communication_buffer[3] = {0};
 
 static uint8_t _i2c_address;
-static mps _internal_mps = MPS_ONE_PER_SECOND;
+static sts3x_mps _internal_mps = MPS_ONE_PER_SECOND;
 
 void sts3x_init(uint8_t i2c_address) {
     _i2c_address = i2c_address;
@@ -56,7 +56,7 @@ int32_t sts3x_signal_temperature(uint16_t temperature_ticks) {
     return ((21875 * (int32_t)temperature_ticks) >> 13) - 45000;
 }
 
-int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
+int16_t sts3x_measure_single_shot(sts3x_repeatability measurement_repeatability,
                                   bool is_clock_stretching,
                                   int32_t* a_temperature) {
     uint16_t raw_temp = 0;
@@ -106,8 +106,8 @@ int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
 }
 
 int16_t
-sts3x_start_periodic_measurement(repeatability measurement_repeatability,
-                                 mps messages_per_second) {
+sts3x_start_periodic_measurement(sts3x_repeatability measurement_repeatability,
+                                 sts3x_mps messages_per_second) {
     int16_t local_error = 0;
     if (messages_per_second == MPS_EVERY_TWO_SECONDS) {
         if (measurement_repeatability == REPEATABILITY_HIGH) {

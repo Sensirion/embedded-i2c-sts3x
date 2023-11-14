@@ -63,7 +63,7 @@ typedef enum {
     REPEATABILITY_LOW = 0,
     REPEATABILITY_MEDIUM = 1,
     REPEATABILITY_HIGH = 2,
-} repeatability;
+} sts3x_repeatability;
 
 typedef enum {
     MPS_EVERY_TWO_SECONDS = 0,
@@ -71,7 +71,7 @@ typedef enum {
     MPS_TWO_PER_SECOND = 2,
     MPS_FOUR_PER_SECOND = 4,
     MPS_TEN_PER_SECOND = 10,
-} mps;
+} sts3x_mps;
 
 /**
  * @brief Initialize i2c address of driver
@@ -106,7 +106,7 @@ int32_t sts3x_signal_temperature(uint16_t temperature_ticks);
  *
  * @return error_code 0 on success, an error code otherwise.
  */
-int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
+int16_t sts3x_measure_single_shot(sts3x_repeatability measurement_repeatability,
                                   bool is_clock_stretching,
                                   int32_t* a_temperature);
 
@@ -127,8 +127,8 @@ int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
  * @return error_code 0 on success, an error code otherwise.
  */
 int16_t
-sts3x_start_periodic_measurement(repeatability measurement_repeatability,
-                                 mps messages_per_second);
+sts3x_start_periodic_measurement(sts3x_repeatability measurement_repeatability,
+                                 sts3x_mps messages_per_second);
 
 /**
  * @brief sts3x_blocking_read_measurement
