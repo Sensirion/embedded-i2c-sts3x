@@ -3,7 +3,7 @@
  *
  * Generator:     sensirion-driver-generator 0.33.0
  * Product:       sts3x
- * Model-Version: 1.0.0
+ * Model-Version: 2.0.0
  */
 /*
  * Copyright (c) 2023, Sensirion AG
@@ -46,22 +46,19 @@
 static uint8_t communication_buffer[3] = {0};
 
 static uint8_t _i2c_address;
-static mps _internal_mps = MPS_ONE_PER_SECOND;
+static sts3x_mps _internal_mps = MPS_ONE_PER_SECOND;
 
 void sts3x_init(uint8_t i2c_address) {
     _i2c_address = i2c_address;
 }
 
-float signal_temperature(uint16_t temperature_ticks) {
-    float temperature = 0.0;
-    temperature = (float)(temperature_ticks);
-    temperature = -45 + ((temperature * 175.0) / 65535.0);
-    return temperature;
+int32_t sts3x_signal_temperature(uint16_t temperature_ticks) {
+    return ((21875 * (int32_t)temperature_ticks) >> 13) - 45000;
 }
 
-int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
+int16_t sts3x_measure_single_shot(sts3x_repeatability measurement_repeatability,
                                   bool is_clock_stretching,
-                                  float* a_temperature) {
+                                  int32_t* a_temperature) {
     uint16_t raw_temp = 0;
     int16_t local_error = 0;
     if (is_clock_stretching) {
@@ -103,14 +100,14 @@ int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
             return local_error;
         }
     }
-    *a_temperature = signal_temperature(raw_temp);
+    *a_temperature = sts3x_signal_temperature(raw_temp);
 
     return local_error;
 }
 
 int16_t
-sts3x_start_periodic_measurement(repeatability measurement_repeatability,
-                                 mps messages_per_second) {
+sts3x_start_periodic_measurement(sts3x_repeatability measurement_repeatability,
+                                 sts3x_mps messages_per_second) {
     int16_t local_error = 0;
     if (messages_per_second == MPS_EVERY_TWO_SECONDS) {
         if (measurement_repeatability == REPEATABILITY_HIGH) {
@@ -203,7 +200,7 @@ sts3x_start_periodic_measurement(repeatability measurement_repeatability,
     return local_error;
 }
 
-int16_t sts3x_blocking_read_measurement(float* a_temperature) {
+int16_t sts3x_blocking_read_measurement(int32_t* a_temperature) {
     uint16_t raw_temp = 0;
     int16_t local_error = 0;
     if (_internal_mps == MPS_EVERY_TWO_SECONDS) {
@@ -221,7 +218,7 @@ int16_t sts3x_blocking_read_measurement(float* a_temperature) {
     if (local_error != NO_ERROR) {
         return local_error;
     }
-    *a_temperature = signal_temperature(raw_temp);
+    *a_temperature = sts3x_signal_temperature(raw_temp);
 
     return local_error;
 }

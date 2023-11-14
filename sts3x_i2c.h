@@ -3,7 +3,7 @@
  *
  * Generator:     sensirion-driver-generator 0.33.0
  * Product:       sts3x
- * Model-Version: 1.0.0
+ * Model-Version: 2.0.0
  */
 /*
  * Copyright (c) 2023, Sensirion AG
@@ -60,39 +60,10 @@ extern "C" {
 #define STS35_I2C_ADDR_4B 0x4b
 
 typedef enum {
-    MEASURE_SINGLE_SHOT_HIGH_REPEATABILITY_CMD_ID = 0x2400,
-    MEASURE_SINGLE_SHOT_HIGH_REPEATABILITY_CLOCK_STRETCHING_CMD_ID = 0x2c06,
-    MEASURE_SINGLE_SHOT_MEDIUM_REPEATABILITY_CMD_ID = 0x240b,
-    MEASURE_SINGLE_SHOT_MEDIUM_REPEATABILITY_CLOCK_STRETCHING_CMD_ID = 0x2c0d,
-    MEASURE_SINGLE_SHOT_LOW_REPEATABILITY_CMD_ID = 0x2416,
-    MEASURE_SINGLE_SHOT_LOW_REPEATABILITY_CLOCK_STRETCHING_CMD_ID = 0x2c10,
-    START_MEASUREMENT_0_5_MPS_HIGH_REPEATABILITY_CMD_ID = 0x2032,
-    START_MEASUREMENT_0_5_MPS_MEDIUM_REPEATABILITY_CMD_ID = 0x2024,
-    START_MEASUREMENT_0_5_MPS_LOW_REPEATABILITY_CMD_ID = 0x202f,
-    START_MEASUREMENT_1_MPS_HIGH_REPEATABILITY_CMD_ID = 0x2130,
-    START_MEASUREMENT_1_MPS_MEDIUM_REPEATABILITY_CMD_ID = 0x2126,
-    START_MEASUREMENT_1_MPS_LOW_REPEATABILITY_CMD_ID = 0x212d,
-    START_MEASUREMENT_2_MPS_HIGH_REPEATABILITY_CMD_ID = 0x2236,
-    START_MEASUREMENT_2_MPS_MEDIUM_REPEATABILITY_CMD_ID = 0x2220,
-    START_MEASUREMENT_2_MPS_LOW_REPEATABILITY_CMD_ID = 0x222b,
-    START_MEASUREMENT_4_MPS_HIGH_REPEATABILITY_CMD_ID = 0x2334,
-    START_MEASUREMENT_4_MPS_MEDIUM_REPEATABILITY_CMD_ID = 0x2322,
-    START_MEASUREMENT_4_MPS_LOW_REPEATABILITY_CMD_ID = 0x2329,
-    START_MEASUREMENT_10_MPS_HIGH_REPEATABILITY_CMD_ID = 0x2737,
-    START_MEASUREMENT_10_MPS_MEDIUM_REPEATABILITY_CMD_ID = 0x2721,
-    START_MEASUREMENT_10_MPS_LOW_REPEATABILITY_CMD_ID = 0x273a,
-    READ_MEASUREMENT_CMD_ID = 0xe000,
-    STOP_MEASUREMENT_CMD_ID = 0x3093,
-    READ_STATUS_REGISTER_CMD_ID = 0xf32d,
-    CLEAR_STATUS_REGISTER_CMD_ID = 0x3041,
-    SOFT_RESET_CMD_ID = 0x30a2,
-} cmd_id_t;
-
-typedef enum {
     REPEATABILITY_LOW = 0,
     REPEATABILITY_MEDIUM = 1,
     REPEATABILITY_HIGH = 2,
-} repeatability;
+} sts3x_repeatability;
 
 typedef enum {
     MPS_EVERY_TWO_SECONDS = 0,
@@ -100,7 +71,7 @@ typedef enum {
     MPS_TWO_PER_SECOND = 2,
     MPS_FOUR_PER_SECOND = 4,
     MPS_TEN_PER_SECOND = 10,
-} mps;
+} sts3x_mps;
 
 /**
  * @brief Initialize i2c address of driver
@@ -111,14 +82,19 @@ typedef enum {
 void sts3x_init(uint8_t i2c_address);
 
 /**
- * @brief signal_temperature
+ * @brief Convert raw temperature ticks to physical value
+ *
+ * Approximation for conversion from temperature tick to pyhsical value.
+ * Conversion function to float is
+ * temperature = -45 + ((temperature_ticks * 175.0) / 65535.0);
+ *
+ * Result of approximation is in milli degrees celsius.
  *
  * @param[in] temperature_ticks
  *
- * @return Converted from ticks to degrees celsius by -45 + (175 * value /
- * 65535)
+ * @return Measured temperature in milli degrees celsius
  */
-float signal_temperature(uint16_t temperature_ticks);
+int32_t sts3x_signal_temperature(uint16_t temperature_ticks);
 
 /**
  * @brief Single shot measurement with the specified properties
@@ -126,14 +102,13 @@ float signal_temperature(uint16_t temperature_ticks);
  * @param[in] measurement_repeatability The repeatability of the periodic
  * measurement
  * @param[in] is_clock_stretching Toggle clock stretching
- * @param[out] a_temperature Converted from ticks to degrees celsius by -45 +
- * (175 * value / 65535)
+ * @param[out] a_temperature Measured temperature in milli degrees celsius
  *
  * @return error_code 0 on success, an error code otherwise.
  */
-int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
+int16_t sts3x_measure_single_shot(sts3x_repeatability measurement_repeatability,
                                   bool is_clock_stretching,
-                                  float* a_temperature);
+                                  int32_t* a_temperature);
 
 /**
  * @brief sts3x_start_periodic_measurement
@@ -152,8 +127,8 @@ int16_t sts3x_measure_single_shot(repeatability measurement_repeatability,
  * @return error_code 0 on success, an error code otherwise.
  */
 int16_t
-sts3x_start_periodic_measurement(repeatability measurement_repeatability,
-                                 mps messages_per_second);
+sts3x_start_periodic_measurement(sts3x_repeatability measurement_repeatability,
+                                 sts3x_mps messages_per_second);
 
 /**
  * @brief sts3x_blocking_read_measurement
@@ -165,12 +140,11 @@ sts3x_start_periodic_measurement(repeatability measurement_repeatability,
  * messages per second with which the 'start_periodic_measurement' command was
  * called and blocks accordingly.
  *
- * @param[out] a_temperature Converted from ticks to degrees celsius by -45 +
- * (175 * value / 65535)
+ * @param[out] a_temperature Measured temperature in milli degrees celsius.
  *
  * @return error_code 0 on success, an error code otherwise.
  */
-int16_t sts3x_blocking_read_measurement(float* a_temperature);
+int16_t sts3x_blocking_read_measurement(int32_t* a_temperature);
 
 /**
  * @brief Read the contents of the status register
